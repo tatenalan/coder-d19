@@ -1,5 +1,6 @@
 const express = require('express');
-const { routerProduct } = require('./routes/product.route');
+const { productRouter } = require('./routes/product.routes');
+const { messageRouter } = require('./routes/message.routes');
 const { mongoConnect } = require('./config.js')
 // llamo a dotenv para usar process.env
 require('dotenv').config()
@@ -21,4 +22,5 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
 
 app.get('/', (req, res) => res.send('Inicio'))
-app.use('/api/products', routerProduct)
+app.use('/api/products', productRouter)
+app.use('/api/messages', messageRouter)
