@@ -1,26 +1,23 @@
-const express = require('express');
-const { productRouter } = require('./routes/product.routes');
-const { messageRouter } = require('./routes/message.routes');
-const { mongoConnect } = require('./config.js')
-// llamo a dotenv para usar process.env
-require('dotenv').config()
+import express from 'express';
+import config from './config/config.js'
+import cors from 'cors'
+import ProductRouter from './routes/product.routes.js';
 
 const app = express()
 
-// Mongo Atlas
-mongoConnect();
-
-// Server
-const PORT = process.env.PORT || 8080
-const server = app.listen(PORT, () => {console.log(`Server running ${PORT} ...`)})
-server.on('error', e => console.error(`SERVER ERROR: `, e))
-
-// Rutas
+if(config.NODE_ENV == 'develop') app.use(cors())
+// configura nuestro directorio estático
+app.use(express.static('public'))
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-// configura nuestro directorio estático
-app.use(express.static(__dirname + '/public'));
 
+// Rutas
+const productRouter = new ProductRouter()
 app.get('/', (req, res) => res.send('Inicio'))
-app.use('/api/products', productRouter)
-app.use('/api/messages', messageRouter)
+app.use('/api/products', productRouter.start())
+
+// Server
+const server = app.listen(config.PORT, () => {
+    console.log(`Server listen on ${config.PORT} (${config.NODE_ENV} - ${config.TYPE_DB})`)
+})
+server.on('error', e => console.error(`SERVER ERROR: `, e))

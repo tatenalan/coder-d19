@@ -1,9 +1,21 @@
-const { Router } = require('express')
-const { getProductController, insertProductController }  = require('../controllers/product.controller.js')
+import express from 'express'
+const productRouter = express.Router()
 
-const productRouter = new Router()
+import ProductController  from '../controllers/product.controller.js'
 
-productRouter.get('/', getProductController)
-productRouter.post('/', insertProductController)
+class ProductRouter {
 
-module.exports = { productRouter }
+    constructor() {
+        this.productController = new ProductController()
+    }
+    
+    start() {
+        productRouter.get('/:id?', this.productController.getProducts)
+        productRouter.post('/', this.productController.insertProduct)
+
+        return productRouter
+    }
+        
+}
+
+export default ProductRouter

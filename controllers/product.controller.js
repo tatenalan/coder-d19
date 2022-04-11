@@ -1,14 +1,30 @@
-const { getProductsService, insertProductService } = require('../services/product.service.js')
+import ProductService from '../services/product.service.js'
 
-const getProductController = async(req, res) => {
-    const products = await getProductsService()
-    res.json(products)
+
+class ProductController {
+    constructor() {
+        this.productService = new ProductService()
+    }
+
+    getProducts = async(req, res) => {
+        try {
+            const id = req.params.id
+            const products = await this.productService.getProducts(id)
+            res.json(products)
+        } catch (e) {
+            console.log(`error to get products `, e)
+        }
+    }
+
+    insertProduct = async(req, res) => {
+        try {
+            const product = req.body
+            const productReturn = await this.productService.insertProduct(product)
+            res.status(201).json(productReturn)
+        } catch (e) {
+            console.log(`error to insert product `, e)
+        }       
+    }
 }
 
-const insertProductController = async(req, res) => {
-    const product = req.body
-    const productReturn = await insertProductService(product)
-    res.status(201).json(productReturn)
-}
-
-module.exports = { getProductController, insertProductController }
+export default ProductController
