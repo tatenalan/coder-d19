@@ -7,7 +7,7 @@ class ProductDBMongoDAO extends ProductBaseDAO {
     
     constructor(database, collection) {
         super()
-        ( async () => {
+       return (async () => {
             console.log(`Connecting mongo DB ...`)
 
             const connection = await MongoClient.connect(`mongodb://127.0.0.1:27017/db`, {
@@ -17,7 +17,7 @@ class ProductDBMongoDAO extends ProductBaseDAO {
 
             const db = connection.db(database)
             this._collection = db.collection(collection)
-        })()
+        })();
     }
 
     getProducts = async _id => {
