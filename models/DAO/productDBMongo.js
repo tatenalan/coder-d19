@@ -6,8 +6,8 @@ const { MongoClient, ObjectId } = mongodb
 class ProductDBMongoDAO extends ProductBaseDAO {
     
     constructor(database, collection) {
-        super()
-       return (async () => {
+        super();
+        (async () => {
             console.log(`Connecting mongo DB ...`)
 
             const connection = await MongoClient.connect(`mongodb://127.0.0.1:27017/db`, {
@@ -28,7 +28,7 @@ class ProductDBMongoDAO extends ProductBaseDAO {
                 console.log(product);
                 return [product]
             } else {
-                const products = await this._collection.findOne({}).toArray()
+                const products = await this._collection.find({}).toArray()
                 return products
             }
         } catch (error) {
